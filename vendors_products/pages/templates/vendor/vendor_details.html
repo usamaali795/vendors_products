@@ -1,0 +1,71 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block title %}{{ vendor.companyName }}{% endblock %}
+
+{% block content %}
+<style>
+    .vendor-bg {
+        background: url("{% static vendor.companyDisplayPicture.url %}") no-repeat center center;
+        background-size: cover;
+        height: 300px; /* Adjust height as needed */
+        position: relative;
+    }
+    .vendor-detail-section {
+        padding: 20px;
+    }
+    .product-card {
+        margin-bottom: 20px;
+    }
+</style>
+<h1>{{ vendor.companyName }}</h1>
+<div class="vendor-bg"></div>
+<div class="vendor-detail-section">
+    <p><strong>Established:</strong> {{ vendor.established }}</p>
+    <p><strong>Employees Count:</strong> {{ vendor.employeesCount }}</p>
+    <p><strong>Internal Professional Service:</strong> {{ vendor.internalProfessionalService }}</p>
+    <p><strong>Last Demo:</strong> {{ vendor.lastDemo }}</p>
+    <p><strong>Last Review:</strong> {{ vendor.lastReview }}</p>
+    <p><strong>Company URL:</strong> <a href="{{ vendor.company_url }}" target="_blank">{{ vendor.company_url }}</a></p>
+    <p><strong>Description:</strong> {{ vendor.description }}</p>
+
+    <h2>Products</h2>
+    <div class="row">
+        {% for product in vendor.products.all %}
+            <div class="col-md-4">
+                <div class="card product-card">
+                    <img src="{% static product.image.url %}" class="card-img-top" alt="{{ product.productName }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.productName }}</h5>
+                        <p class="card-text"><strong>Type:</strong> {{ product.type }}</p>
+                        <p class="card-text"><strong>Business Area:</strong> {{ product.business_area }}</p>
+                        <p class="card-text"><strong>Modules:</strong> {{ product.modules }}</p>
+                        <p class="card-text"><strong>Client Types:</strong> {{ product.financialServicesClientTypes }}</p>
+                        <p class="card-text"><strong>Cloud:</strong> {{ product.cloud }}</p>
+                        <p class="card-text">{{ product.description|truncatewords:20 }}</p>
+                        <button class="btn btn-primary" onclick="toggleProductDescription(this)">View More</button>
+                        <p class="card-text product-description-full" style="display: none;">{{ product.description }}</p>
+                        <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'vendor_list' %}">Back to vendor list</a>
+</div>
+
+<script>
+    function toggleProductDescription(button) {
+        const cardBody = button.parentElement;
+        const fullDescription = cardBody.querySelector('.product-description-full');
+        if (fullDescription.style.display === "none") {
+            fullDescription.style.display = "block";
+            button.textContent = "View Less";
+        } else {
+            fullDescription.style.display = "none";
+            button.textContent = "View More";
+        }
+    }
+</script>
+{% endblock %}

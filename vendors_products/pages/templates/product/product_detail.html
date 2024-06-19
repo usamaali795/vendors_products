@@ -1,0 +1,29 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block title %}{{ product.productName }}{% endblock %}
+
+{% block content %}
+<style>
+    .product-detail {
+        padding: 20px;
+    }
+    .product-image {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+
+<div class="product-detail">
+    <h1>{{ product.productName }}</h1>
+    <img src="{% static product.image.url %}" alt="{{ product.productName }}" class="product-image mb-3">
+    <p><strong>Type:</strong> {{ product.type }}</p>
+    <p><strong>Description:</strong> {{ product.description }}</p>
+    <p><strong>Business Area:</strong> {{ product.business_area }}</p>
+    <p><strong>Modules:</strong> {{ product.modules }}</p>
+    <p><strong>Client Types:</strong> {{ product.financialServicesClientTypes }}</p>
+    <p><strong>Cloud:</strong> {{ product.cloud }}</p>
+    
+    <a href="{% url 'vendor_detail' product.vendor.id %}" class="btn btn-secondary">Back to Vendor</a>
+</div>
+{% endblock %}

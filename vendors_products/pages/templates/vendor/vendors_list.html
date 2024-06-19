@@ -1,0 +1,65 @@
+ {% extends '../base.html' %}
+{% load static %}
+
+{% block title %}Vendor List{% endblock %}
+
+{% block content %}
+<style>
+    .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .card-img-top {
+        height: 200px; /* Adjust as needed */
+        object-fit: cover;
+    }
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .description-short, .description-full {
+        flex-grow: 1;
+    }
+    .card-footer {
+        margin-top: auto;
+    }
+</style>
+
+<h1>Vendors</h1>
+<div class="row">
+    {% for vendor in vendors %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{% static vendor.companyDisplayPicture.url %}" class="card-img-top" alt="{{ vendor.companyName }}">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{% url 'vendor_detail' vendor.id %}">{{ vendor.companyName }}</a>
+                    </h5>
+                    <p class="card-text description-short">{{ vendor.description|truncatewords:20 }}</p>
+                    <p class="card-text description-full" style="display: none;">{{ vendor.description }}</p>
+                    <button class="btn btn-primary view-more" onclick="toggleDescription(this)">View More</button>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+    function toggleDescription(button) {
+        const cardBody = button.parentElement;
+        const shortDescription = cardBody.querySelector('.description-short');
+        const fullDescription = cardBody.querySelector('.description-full');
+        if (fullDescription.style.display === "none") {
+            fullDescription.style.display = "block";
+            shortDescription.style.display = "none";
+            button.textContent = "View Less";
+        } else {
+            fullDescription.style.display = "none";
+            shortDescription.style.display = "block";
+            button.textContent = "View More";
+        }
+    }
+</script>
+{% endblock %}
